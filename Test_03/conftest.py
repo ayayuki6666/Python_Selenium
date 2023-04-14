@@ -42,12 +42,3 @@ def login_driver():
     driver = webdriver.Chrome(options=ops)
     yield driver
     driver.quit()
-
-@pytest.fixture(scope="function")
-def login_out(driver):
-    yield
-    driver.get("http://10.100.164.47/")
-    ico=driver.find_element(By.CSS_SELECTOR," div.dzq-dropdown > div")
-    ActionChains(driver).move_to_element(ico).perform()
-    button=driver.find_elements(By.CSS_SELECTOR,"li.dzq-dropdown-menu__item")[1]
-    ActionChains(driver).move_to_element(button).click().perform()

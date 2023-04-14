@@ -1,3 +1,5 @@
+from time import sleep
+
 from poium import Page,Element
 
 class PostPage(Page):
@@ -8,8 +10,9 @@ class PostPage(Page):
 
     def post_content(self, title, content):
         self.open(self.url)
+        sleep(2)
         if (title!=None):
             self.post_title_input.send_keys(title)
-        if (content != None):
+        if (content!= None):
             self.post_title_content.send_keys(content)
         self.post_title_confirm.click()
