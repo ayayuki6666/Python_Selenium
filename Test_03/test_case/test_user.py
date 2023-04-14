@@ -1,0 +1,56 @@
+import re
+from time import sleep
+
+import pytest
+import yaml
+
+from Test_03.page.answerpage import AnswerPage
+from Test_03.page.loginpage import LoginPage
+from Test_03.page.postpage import PostPage
+
+def dataGenerate_Login():
+    path= "../data/login.yaml"
+    with open(path,'r') as file:
+        data=file.read()
+        result =yaml.load(data,Loader=yaml.FullLoader)
+        return result
+
+def dataGenerate_Post():
+    path= "../data/post.yaml"
+    with open(path,'r') as file:
+        data=file.read()
+        result =yaml.load(data,Loader=yaml.FullLoader)
+        return result
+
+def dataGenerate_Answer():
+    path= "../data/answer.yaml"
+    with open(path,'r') as file:
+        data=file.read()
+        result =yaml.load(data,Loader=yaml.FullLoader)
+        return result
+@pytest.mark.skip("暂时跳过")
+@pytest.mark.parametrize('param', dataGenerate_Login())
+def test_Login(driver,login_out,param):
+    page=LoginPage(driver)
+    page.login(param["account"],param["password"])
+    assert param["expected"]==(driver.current_url=="http://10.100.164.47/")
+
+
+@pytest.mark.skip("暂时跳过")
+@pytest.mark.parametrize('param', dataGenerate_Post())
+def test_Post(user_driver,param):
+    page=PostPage(driver=user_driver)
+    page.post_content(param["Title"], param["Content"])
+    sleep(1)
+    assert param["expected"]==(not bool(re.match("http://10.100.164.47/thread/post",user_driver.current_url)))
+
+@pytest.mark.skip("暂时跳过")
+@pytest.mark.parametrize('param', dataGenerate_Answer())
+def test_Answer(user_driver,param):
+    page=AnswerPage(user_driver)
+    page.open_page(param["Sequence"])
+    if(user_driver.current_url!="http://10.100.164.47/404"):
+        assert_value=page.answer(param["Content"])
+    else:
+        assert_value=False
+    assert param["expected"]==assert_value

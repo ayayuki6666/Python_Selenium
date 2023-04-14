@@ -1,0 +1,12 @@
+- category: "test1"
+  expected: true
+  sequence: 0
+- category: ""
+  expected: false
+  sequence: 1
+- category: "test3"
+  expected: false
+  sequence: -1
+- category: "test4"
+  expected: true
+  sequence: 3
